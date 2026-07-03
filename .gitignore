@@ -1,0 +1,16 @@
+# VS Code
+.vscode/settings.json
+
+# Supabase Local Temp Files
+supabase/.temp/
+
+# OS temporary files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node / package manager logs (just in case)
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

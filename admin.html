@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | Gujarat Bus Seva</title>
+  <meta name="description" content="Gujarat Bus Seva — Admin Panel">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     LOGIN SCREEN
+     ═══════════════════════════════════════════════ -->
+<div id="loginOverlay">
+  <div class="login-card">
+
+    <div class="login-logo-wrap">🛡️</div>
+
+    <h1>Admin Panel</h1>
+    <p>Gujarat Bus Seva &nbsp;·&nbsp; Secure Access</p>
+
+    <div class="login-divider"></div>
+
+    <div class="login-field-group">
+      <label class="login-label" for="adminUser">Operator ID</label>
+      <div class="login-input-wrap">
+        <input class="login-input" type="text" id="adminUser" placeholder="admin" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="login-field-group">
+      <label class="login-label" for="adminPass">Access Code</label>
+      <div class="login-input-wrap">
+        <input class="login-input" type="password" id="adminPass" placeholder="••••••••" autocomplete="off">
+      </div>
+    </div>
+
+    <div id="loginError">⚠ &nbsp;Invalid credentials. Please try again.</div>
+
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">Login to Admin Panel →</button>
+
+    <p class="login-footer">Gujarat Bus Seva · Authorized Personnel Only</p>
+    <div class="login-badge">🚌 &nbsp;GUJARAT BUS SEVA OPERATIONS</div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     MAIN APP
+     ═══════════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-logo">🚌</div>
+      <div class="sidebar-brand-text">
+        <strong>Admin Panel</strong>
+        <small>Gujarat Bus Seva</small>
+      </div>
+      <div class="sidebar-status">
+        <div class="sidebar-status-dot"></div>
+        LIVE
+      </div>
+    </div>
+
+    <nav class="nav-section">
+      <div class="nav-label">Operations</div>
+      <button class="nav-item active" id="nav-dashboard" onclick="showSection('dashboard')">
+        <span class="nav-icon">📊</span><span>Dashboard</span>
+      </button>
+      <button class="nav-item" id="nav-bookings" onclick="showSection('bookings')">
+        <span class="nav-icon">🎫</span><span>Bookings</span>
+      </button>
+      <button class="nav-item" id="nav-analytics" onclick="showSection('analytics')">
+        <span class="nav-icon">📈</span><span>Analytics</span>
+      </button>
+    </nav>
+
+    <nav class="nav-section">
+      <div class="nav-label">Portals</div>
+      <a href="search.html" class="nav-item">
+        <span class="nav-icon">🏠</span><span>Booking Site</span>
+      </a>
+      <a href="conductor.html" class="nav-item">
+        <span class="nav-icon">🧭</span><span>Conductor Portal</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">AD</div>
+        <div class="sidebar-user-info">
+          <strong>Administrator</strong>
+          <span>● Online</span>
+        </div>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">
+        <span>🚪</span><span>Sign Out</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── MAIN CONTENT ── -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div>
+          <div class="topbar-title" id="pageTitle">Admin Panel</div>
+          <div class="topbar-sub" id="pageSubtitle">system.overview → all_metrics</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="status-pill">
+          <span class="status-dot"></span>Live System
+        </div>
+        <button class="btn btn-ghost" onclick="refreshCurrent()">🔄 Refresh</button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- ════════════════════════════════
+           DASHBOARD SECTION
+           ════════════════════════════════ -->
+      <div class="section active" id="section-dashboard">
+
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2>Mission Control</h2>
+            <p>real_time.bookings &amp; revenue.overview</p>
+          </div>
+          <button class="btn btn-ghost" onclick="loadDashboard()">⟳ &nbsp;Sync Data</button>
+        </div>
+
+        <!-- KPI Stats -->
+        <div class="stat-grid">
+          <div class="stat-card red">
+            <div class="stat-icon">🎫</div>
+            <div class="stat-info">
+              <strong id="stat-total">—</strong>
+              <span>Total Bookings</span>
+              <div class="stat-trend">▲ All time</div>
+            </div>
+          </div>
+          <div class="stat-card saffron">
+            <div class="stat-icon">💰</div>
+            <div class="stat-info">
+              <strong id="stat-revenue">—</strong>
+              <span>Total Revenue</span>
+              <div class="stat-trend" style="color:var(--saffron);">₹ Collected</div>
+            </div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon">💺</div>
+            <div class="stat-info">
+              <strong id="stat-seats">—</strong>
+              <span>Seats Booked</span>
+              <div class="stat-trend">▲ Passengers</div>
+            </div>
+          </div>
+          <div class="stat-card teal">
+            <div class="stat-icon">🗺️</div>
+            <div class="stat-info">
+              <strong id="stat-routes">—</strong>
+              <span>Unique Routes</span>
+              <div class="stat-trend" style="color:var(--teal);">Active routes</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts + Recent -->
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>📡 Revenue Trend</h3>
+              <span class="chart-badge">LAST 7 DAYS</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="revenueChart"></canvas>
+            </div>
+          </div>
+          <div class="table-card">
+            <div class="table-head">
+              <h2>Recent Bookings</h2>
+              <button class="btn btn-ghost" onclick="showSection('bookings')" style="font-size:0.8rem;">View All →</button>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>PNR</th>
+                    <th>Passenger</th>
+                    <th>Route</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recentBody">
+                  <tr class="loading-row">
+                    <td colspan="6"><div class="spinner"></div>Initializing…</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ════════════════════════════════
+           BOOKINGS SECTION
+           ════════════════════════════════ -->
+      <div class="section" id="section-bookings">
+
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2>Booking Registry</h2>
+            <p>bookings.all → confirmed_tickets</p>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-head">
+            <h2>
+              All Bookings
+              <span class="table-count-badge" id="bookingCount">—</span>
+            </h2>
+            <div class="table-controls">
+              <input class="search-input" type="text" id="searchInput"
+                placeholder="🔍 Search PNR, name, mobile…" oninput="filterBookings()">
+              <input class="filter-select" type="date" id="dateFilter"
+                onchange="filterBookings()" title="Filter by journey date">
+              <button class="btn btn-green" onclick="exportCSV()">⬇ Export CSV</button>
+            </div>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>PNR</th>
+                  <th>Passenger</th>
+                  <th>Mobile</th>
+                  <th>Bus</th>
+                  <th>Route</th>
+                  <th>Journey Date</th>
+                  <th>Seats</th>
+                  <th>Amount</th>
+                  <th>Booked At</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="bookingsBody">
+                <tr class="loading-row">
+                  <td colspan="11"><div class="spinner"></div>Loading…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-footer">
+            <span id="footerInfo">—</span>
+            <div class="pagination" id="pagination"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ════════════════════════════════
+           ANALYTICS SECTION
+           ════════════════════════════════ -->
+      <div class="section" id="section-analytics">
+
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2>Intelligence Hub</h2>
+            <p>analytics.routes &amp; revenue.performance</p>
+          </div>
+          <button class="btn btn-ghost" onclick="loadAnalytics()">⟳ &nbsp;Refresh</button>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card teal">
+            <div class="stat-icon">📅</div>
+            <div class="stat-info">
+              <strong id="ana-today">—</strong>
+              <span>Today's Bookings</span>
+              <div class="stat-trend" style="color:var(--teal);">▲ Today</div>
+            </div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-info">
+              <strong id="ana-route" style="font-size:1.1rem;line-height:1.3;">—</strong>
+              <span>Top Route</span>
+              <div class="stat-trend">Most bookings</div>
+            </div>
+          </div>
+          <div class="stat-card saffron">
+            <div class="stat-icon">💵</div>
+            <div class="stat-info">
+              <strong id="ana-avg">—</strong>
+              <span>Avg Ticket Value</span>
+              <div class="stat-trend" style="color:var(--saffron);">Per booking</div>
+            </div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon">🚌</div>
+            <div class="stat-info">
+              <strong id="ana-bus" style="font-size:1.1rem;line-height:1.3;">—</strong>
+              <span>Most Popular Bus</span>
+              <div class="stat-trend">▲ Highest demand</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 2fr; gap:20px; margin-bottom:28px;">
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>🔭 Route Share</h3>
+              <span class="chart-badge">TOP 5</span>
+            </div>
+            <div class="chart-container" style="height:300px;">
+              <canvas id="routeChart"></canvas>
+            </div>
+          </div>
+          <div class="table-card">
+            <div class="table-head">
+              <h2>Route Performance Matrix</h2>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Route</th>
+                    <th>Bookings</th>
+                    <th>Seats Sold</th>
+                    <th>Revenue</th>
+                    <th>Market Share</th>
+                  </tr>
+                </thead>
+                <tbody id="analyticsBody">
+                  <tr class="loading-row">
+                    <td colspan="6"><div class="spinner"></div>Loading…</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ═══ DELETE MODAL ═══ -->
+<div class="modal-backdrop" id="deleteModal">
+  <div class="modal">
+    <h3><span style="font-size:22px;">⚠️</span> Confirm Deletion</h3>
+    <p>
+      You are about to permanently delete booking
+      <strong id="deletePnrLabel" class="pnr-code" style="display:inline-block;margin-top:6px;"></strong>.
+      <br><br>
+      This action <strong style="color:var(--accent-red);">cannot be undone</strong>.
+    </p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">🗑 &nbsp;Delete Permanently</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div id="toast"></div>
+
+<!-- Scripts -->
+<script src="env.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="admin.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Routes | Gujarat Bus Seva</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="styles.css">
+  <script>history.scrollRestoration='manual';window.scrollTo(0,0);</script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">GS</span>
+      <div>
+        <strong>Gujarat Bus Seva</strong>
+        <small>GSRTC inspired booking demo</small>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <button class="ghost-button" id="myTicketsBtn" type="button">My Tickets</button>
+      <a href="conductor.html" class="ghost-button" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;">Conductor Login</a>
+      <a href="admin.html" class="ghost-button" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;">Admin</a>
+    </nav>
+  </header>
+  <main>
+    <div class="page" id="page-routes" style="display:block; opacity:1; transform:none;">
+      <button class="floating-back" id="backToSearch" type="button" onclick="window.location.href='search.html'" aria-label="Go Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+
+      <section class="route-strip reveal" aria-label="Popular route shortcuts">
+        <button data-from="Ahmedabad" data-to="Surat" type="button">Ahmedabad -> Surat</button>
+        <button data-from="Surat" data-to="Dwarka" type="button">Surat -> Dwarka</button>
+        <button data-from="Vadodara" data-to="Ahmedabad" type="button">Vadodara -> Ahmedabad</button>
+        <button data-from="Gandhinagar" data-to="Somnath" type="button">Gandhinagar -> Somnath</button>
+        <button data-from="Rajkot" data-to="Bhavnagar" type="button">Rajkot -> Bhavnagar</button>
+        <button data-from="Bhuj" data-to="Ahmedabad" type="button">Bhuj -> Ahmedabad</button>
+        <button data-from="Mehsana" data-to="Palanpur" type="button">Mehsana -> Palanpur</button>
+        <button data-from="Navsari" data-to="Vapi" type="button">Navsari -> Vapi</button>
+      </section>
+
+      <section class="panel reveal" id="routes">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Available services</p>
+            <h2>Recommended buses</h2>
+          </div>
+          <div class="journey-summary" id="journeySummary">Ahmedabad to Surat</div>
+        </div>
+        <div class="route-results" id="routeResults"></div>
+      </section>
+    </div>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <dialog class="ticket-dialog" id="ticketDialog">
+    <div class="ticket">
+      <button class="close-dialog" id="closeTicket" type="button" aria-label="Close ticket">x</button>
+      <div class="ticket-top">
+        <span class="brand-mark">GS</span>
+        <div>
+          <p class="eyebrow">Confirmed ticket</p>
+          <h2>Gujarat Bus Seva</h2>
+        </div>
+      </div>
+      <div class="ticket-route">
+        <strong id="ticketFrom">Ahmedabad</strong>
+        <span></span>
+        <strong id="ticketTo">Surat</strong>
+      </div>
+      <div class="ticket-grid">
+        <div><span>PNR</span><strong id="ticketPnr">GS000000</strong></div>
+        <div><span>Date</span><strong id="ticketDate">--</strong></div>
+        <div><span>Bus</span><strong id="ticketBus">--</strong></div>
+        <div><span>Seats</span><strong id="ticketSeats">--</strong></div>
+        <div><span>Category</span><strong id="ticketCategories">--</strong></div>
+        <div><span>Passenger</span><strong id="ticketPassenger">--</strong></div>
+        <div><span>Boarding</span><strong id="ticketBoarding">--</strong></div>
+        <div><span>Amount</span><strong id="ticketAmount">Rs. 0</strong></div>
+      </div>
+      <button class="primary-button full-width" id="downloadTicketAction" type="button">Download Ticket</button>
+    </div>
+  </dialog>
+
+  <script src="env.js"></script>
+  <script src="script.js"></script>
+
+  <!-- My Tickets Auth Dialog -->
+  <dialog class="my-tickets-dialog" id="myTicketsAuthDialog">
+    <div class="ticket-auth">
+      <button class="close-dialog" onclick="document.getElementById('myTicketsAuthDialog').close()" type="button" aria-label="Close">×</button>
+      <div class="ticket-top" style="margin-bottom: 20px;">
+        <span class="brand-mark">GS</span>
+        <div>
+          <p class="eyebrow">My Tickets</p>
+          <h2>Find Your Journeys</h2>
+        </div>
+      </div>
+      <p style="color: var(--muted); margin-bottom: 16px; font-size: 0.95rem;">Enter your booking details to fetch all your past and upcoming tickets.</p>
+      
+      <div style="margin-bottom: 14px;">
+        <label style="display:block; margin-bottom: 6px; font-weight: 700; color: var(--ink); font-size: 0.85rem;">Mobile Number</label>
+        <input type="tel" id="myTicketsMobile" placeholder="e.g. 9876543210" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line);">
+      </div>
+      
+      <div style="margin-bottom: 24px;">
+        <label style="display:block; margin-bottom: 6px; font-weight: 700; color: var(--ink); font-size: 0.85rem;">Email Address</label>
+        <input type="email" id="myTicketsEmail" placeholder="e.g. name@example.com" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line);">
+      </div>
+
+      <button class="primary-button full-width" id="fetchMyTicketsBtn" type="button">Fetch My Tickets</button>
+    </div>
+  </dialog>
+
+  <!-- My Tickets List Dialog -->
+  <dialog class="my-tickets-list-dialog" id="myTicketsListDialog">
+    <div class="tickets-list-container">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line);">
+        <div>
+          <h2 style="margin: 0; font-size: 1.5rem;">My Tickets</h2>
+          <p style="margin: 4px 0 0; color: var(--muted); font-size: 0.9rem;" id="myTicketsSubtitle">Tickets for ...</p>
+        </div>
+        <button class="close-dialog" style="position: static;" onclick="document.getElementById('myTicketsListDialog').close()" type="button" aria-label="Close">×</button>
+      </div>
+
+      <div class="tickets-tabs">
+        <button class="tab-btn active" id="tabUpcoming" onclick="switchTicketTab('upcoming')">Upcoming Journeys</button>
+        <button class="tab-btn" id="tabPast" onclick="switchTicketTab('past')">Past Journeys</button>
+      </div>
+
+      <div id="ticketsListContent" style="min-height: 250px; max-height: 50vh; overflow-y: auto; padding-right: 10px;">
+        <!-- Tickets will be injected here via JS -->
+      </div>
+    </div>
+  </dialog>
+</body>
+</html>
+
+

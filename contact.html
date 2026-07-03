@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | Gujarat Bus Seva</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .legal-container {
+      max-width: 720px;
+      margin: 40px auto 60px;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .legal-container h1 {
+      font-size: 2.2rem;
+      margin: 0 0 8px;
+      color: var(--red);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .last-updated {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 32px;
+      font-weight: 600;
+      display: block;
+    }
+    .legal-container h2 {
+      font-size: 1.25rem;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      color: var(--teal);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+    .legal-container p {
+      line-height: 1.8;
+      color: #374151;
+      font-size: 0.96rem;
+      margin-bottom: 16px;
+    }
+    .contact-details {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 16px;
+    }
+    .contact-details p {
+      margin-bottom: 12px;
+    }
+    .contact-details p:last-child {
+      margin-bottom: 0;
+    }
+    .contact-details strong {
+      color: var(--ink);
+    }
+    .contact-details a {
+      color: var(--red);
+      font-weight: 700;
+      text-decoration: none;
+      transition: color 180ms ease;
+    }
+    .contact-details a:hover {
+      color: var(--red-dark);
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">GS</span>
+      <div>
+        <strong>Gujarat Bus Seva</strong>
+        <small>GSRTC inspired booking demo</small>
+      </div>
+    </div>
+    <a href="search.html" class="ghost-button" style="text-decoration: none; display: flex; align-items: center;">Home</a>
+  </header>
+
+  <button class="floating-back" type="button" onclick="window.location.href='search.html'" aria-label="Go Back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  </button>
+
+  <main>
+    <article class="legal-container">
+      <h1>Contact Us</h1>
+      <span class="last-updated">Last updated: June 20, 2026</span>
+      
+      <h2>1. General Inquiries</h2>
+      <p>For any general questions or information regarding our bus schedules, routes, and services, please reach out to us at:</p>
+      
+      <div class="contact-details">
+        <p><strong>Email:</strong> <a href="mailto:info@gujaratbusseva.in">info@gujaratbusseva.in</a></p>
+        <p><strong>Phone:</strong> +91-79-1234-5678</p>
+      </div>
+
+      <h2>2. Support and Grievances</h2>
+      <p>If you have any issues with your booking, payment, or journey experience, our dedicated support team is here to help.</p>
+      
+      <div class="contact-details">
+        <p><strong>Email:</strong> <a href="mailto:support@gujaratbusseva.in">support@gujaratbusseva.in</a></p>
+      </div>
+
+      <h2>3. Office Address</h2>
+      <p>You can also visit our head office or send us physical mail at the address below:</p>
+      
+      <div class="contact-details" style="line-height: 1.8; color: #374151;">
+        <strong>Gujarat Bus Seva Head Office</strong><br>
+        ST Transport Bhavan, Central ST Depot,<br>
+        Ahmedabad, Gujarat 380022<br>
+        India
+      </div>
+    </article>
+  </main>
+</body>
+</html>

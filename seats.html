@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seats | Gujarat Bus Seva</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="styles.css">
+  <script>history.scrollRestoration='manual';window.scrollTo(0,0);</script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">GS</span>
+      <div>
+        <strong>Gujarat Bus Seva</strong>
+        <small>GSRTC inspired booking demo</small>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <button class="ghost-button" id="myTicketsBtn" type="button">My Tickets</button>
+      <a href="conductor.html" class="ghost-button" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;">Conductor Login</a>
+      <a href="admin.html" class="ghost-button" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;">Admin</a>
+    </nav>
+  </header>
+  <main>
+    <div class="page" id="page-seats" style="display:block; opacity:1; transform:none;">
+      <button class="floating-back" id="backToRoutes" type="button" onclick="window.location.href='routes.html'" aria-label="Go Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+
+      <section class="booking-workspace page-transition" id="seats">
+        <div class="panel reveal">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Coach layout</p>
+              <h2>Select seats</h2>
+            </div>
+            <div class="seat-legend">
+              <span><i class="available"></i>Available</span>
+              <span><i class="male"></i>Male</span>
+              <span><i class="female"></i>Female</span>
+              <span><i class="child"></i>Child</span>
+              <span><i class="divyang"></i>Divyang</span>
+              <span><i class="booked"></i>Booked</span>
+            </div>
+          </div>
+          <div class="coach-shell">
+            <div class="driver-cabin">
+              <span>Driver</span>
+              <div class="steering"></div>
+            </div>
+            <div class="seat-map" id="seatMap" aria-label="Seat map"></div>
+          </div>
+        </div>
+
+        <aside class="summary-card reveal delay-1">
+          <p class="eyebrow">Trip summary</p>
+          <h2 id="selectedBusName">Select a bus</h2>
+          <div class="timeline">
+            <div>
+              <span id="summaryFrom">Ahmedabad</span>
+              <strong id="summaryDepart">--:--</strong>
+            </div>
+            <i></i>
+            <div>
+              <span id="summaryTo">Surat</span>
+              <strong id="summaryArrive">--:--</strong>
+            </div>
+          </div>
+          <dl class="fare-list">
+            <div>
+              <dt>Seats</dt>
+              <dd id="summarySeats">None</dd>
+            </div>
+            <div class="passenger-type-block">
+              <dt>Passenger Type</dt>
+              <dd id="passengerTypes">Select seats first</dd>
+            </div>
+            <div>
+              <dt>Base Fare</dt>
+              <dd id="baseFare">Rs. 0</dd>
+            </div>
+            <div>
+              <dt>Concession</dt>
+              <dd id="discountFare">Rs. 0</dd>
+            </div>
+            <div>
+              <dt>Service Fee</dt>
+              <dd id="serviceFee">Rs. 0</dd>
+            </div>
+            <div class="total-row">
+              <dt>Total</dt>
+              <dd id="totalFare">Rs. 0</dd>
+            </div>
+          </dl>
+          <!-- Passenger count display with sessionStorage sync -->
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding:10px 14px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
+            <span style="font-size:0.85rem; color:#64748b; font-weight:600;">Passengers</span>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <button type="button" id="pcMinus" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #cbd5e1;background:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#1e293b;" aria-label="Decrease passengers">−</button>
+              <input id="passengerCount" type="number" min="1" max="6" value="1" readonly
+                style="width:32px;text-align:center;border:none;background:transparent;font-size:1rem;font-weight:700;color:#1e293b;pointer-events:none;">
+              <button type="button" id="pcPlus" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #cbd5e1;background:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#1e293b;" aria-label="Increase passengers">+</button>
+            </div>
+          </div>
+          <button class="primary-button full-width" id="continuePayment" type="button">Continue to Payment</button>
+        </aside>
+      </section>
+    </div>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <dialog class="ticket-dialog" id="ticketDialog">
+    <div class="ticket">
+      <button class="close-dialog" id="closeTicket" type="button" aria-label="Close ticket">x</button>
+      <div class="ticket-top">
+        <span class="brand-mark">GS</span>
+        <div>
+          <p class="eyebrow">Confirmed ticket</p>
+          <h2>Gujarat Bus Seva</h2>
+        </div>
+      </div>
+      <div class="ticket-route">
+        <strong id="ticketFrom">Ahmedabad</strong>
+        <span></span>
+        <strong id="ticketTo">Surat</strong>
+      </div>
+      <div class="ticket-grid">
+        <div><span>PNR</span><strong id="ticketPnr">GS000000</strong></div>
+        <div><span>Date</span><strong id="ticketDate">--</strong></div>
+        <div><span>Bus</span><strong id="ticketBus">--</strong></div>
+        <div><span>Seats</span><strong id="ticketSeats">--</strong></div>
+        <div><span>Category</span><strong id="ticketCategories">--</strong></div>
+        <div><span>Passenger</span><strong id="ticketPassenger">--</strong></div>
+        <div><span>Boarding</span><strong id="ticketBoarding">--</strong></div>
+        <div><span>Amount</span><strong id="ticketAmount">Rs. 0</strong></div>
+      </div>
+      <button class="primary-button full-width" id="downloadTicketAction" type="button">Download Ticket</button>
+    </div>
+  </dialog>
+
+  <script src="env.js"></script>
+  <script src="script.js"></script>
+
+  <!-- My Tickets Auth Dialog -->
+  <dialog class="my-tickets-dialog" id="myTicketsAuthDialog">
+    <div class="ticket-auth">
+      <button class="close-dialog" onclick="document.getElementById('myTicketsAuthDialog').close()" type="button" aria-label="Close">×</button>
+      <div class="ticket-top" style="margin-bottom: 20px;">
+        <span class="brand-mark">GS</span>
+        <div>
+          <p class="eyebrow">My Tickets</p>
+          <h2>Find Your Journeys</h2>
+        </div>
+      </div>
+      <p style="color: var(--muted); margin-bottom: 16px; font-size: 0.95rem;">Enter your booking details to fetch all your past and upcoming tickets.</p>
+      
+      <div style="margin-bottom: 14px;">
+        <label style="display:block; margin-bottom: 6px; font-weight: 700; color: var(--ink); font-size: 0.85rem;">Mobile Number</label>
+        <input type="tel" id="myTicketsMobile" placeholder="e.g. 9876543210" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line);">
+      </div>
+      
+      <div style="margin-bottom: 24px;">
+        <label style="display:block; margin-bottom: 6px; font-weight: 700; color: var(--ink); font-size: 0.85rem;">Email Address</label>
+        <input type="email" id="myTicketsEmail" placeholder="e.g. name@example.com" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line);">
+      </div>
+
+      <button class="primary-button full-width" id="fetchMyTicketsBtn" type="button">Fetch My Tickets</button>
+    </div>
+  </dialog>
+
+  <!-- My Tickets List Dialog -->
+  <dialog class="my-tickets-list-dialog" id="myTicketsListDialog">
+    <div class="tickets-list-container">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line);">
+        <div>
+          <h2 style="margin: 0; font-size: 1.5rem;">My Tickets</h2>
+          <p style="margin: 4px 0 0; color: var(--muted); font-size: 0.9rem;" id="myTicketsSubtitle">Tickets for ...</p>
+        </div>
+        <button class="close-dialog" style="position: static;" onclick="document.getElementById('myTicketsListDialog').close()" type="button" aria-label="Close">×</button>
+      </div>
+
+      <div class="tickets-tabs">
+        <button class="tab-btn active" id="tabUpcoming" onclick="switchTicketTab('upcoming')">Upcoming Journeys</button>
+        <button class="tab-btn" id="tabPast" onclick="switchTicketTab('past')">Past Journeys</button>
+      </div>
+
+      <div id="ticketsListContent" style="min-height: 250px; max-height: 50vh; overflow-y: auto; padding-right: 10px;">
+        <!-- Tickets will be injected here via JS -->
+      </div>
+    </div>
+  </dialog>
+</body>
+</html>
+
+

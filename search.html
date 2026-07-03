@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gujarat Bus Seva | Online Bus Booking</title>
+  <link rel="stylesheet" href="styles.css">
+  <script>history.scrollRestoration='manual';window.scrollTo(0,0);</script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">GS</span>
+      <div>
+        <strong>Gujarat Bus Seva</strong>
+        <small>GSRTC inspired booking demo</small>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <button class="ghost-button" id="myTicketsBtn" type="button">My Tickets</button>
+      <a href="conductor.html" class="ghost-button" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;">Conductor Login</a>
+      <a href="admin.html" class="ghost-button" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;">Admin</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Page 1: Search -->
+    <div class="page" id="page-search" style="display:block; opacity:1; transform:none;">
+      <section class="booking-stage" id="booking">
+        <div class="stage-copy reveal">
+          <p class="eyebrow">Gujarat state road travel</p>
+          <h1>Online Bus Booking</h1>
+          <p class="stage-text">
+            Fast search, animated route selection, live seat map, passenger details,
+            payment preview, and instant ticket confirmation in one smooth demo.
+          </p>
+          <div class="stats-grid" aria-label="Service highlights">
+            <article>
+              <strong>1,640+</strong>
+              <span>City pairs</span>
+            </article>
+            <article>
+              <strong>24/7</strong>
+              <span>Booking desk</span>
+            </article>
+            <article>
+              <strong>98%</strong>
+              <span>On-time trips</span>
+            </article>
+          </div>
+        </div>
+
+        <form class="booking-card reveal delay-1" id="searchForm">
+          <div class="form-header">
+            <div>
+              <p class="eyebrow">Plan your journey</p>
+              <h2>Find a bus</h2>
+            </div>
+            <span class="live-pill"><span></span> Live routes</span>
+          </div>
+
+          <div class="field-grid">
+            <label>
+              <span>From</span>
+              <select id="fromCity" required></select>
+            </label>
+            <label>
+              <span>To</span>
+              <select id="toCity" required></select>
+            </label>
+            <label>
+              <span>Journey Date</span>
+              <input id="journeyDate" type="date" required>
+            </label>
+            <label>
+              <span>Passengers</span>
+              <input id="passengerCount" min="1" max="6" type="number" value="1" required>
+            </label>
+          </div>
+
+          <button class="primary-button" type="submit">
+            <span>Search Buses</span>
+            <span class="button-arrow">→</span>
+          </button>
+        </form>
+
+        <div class="terminal-visual reveal delay-2" aria-hidden="true">
+          <div class="terminal-building">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="road">
+            <div class="road-lines"></div>
+            <div class="bus-illustration">
+              <div class="bus-top"></div>
+              <div class="bus-body">
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <div class="bus-front"></div>
+              <div class="wheel wheel-left"></div>
+              <div class="wheel wheel-right"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Page 2: Routes -->
+    <div class="page" id="page-routes">
+      <button class="floating-back" id="backToSearch" type="button" aria-label="Go Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <section class="route-strip reveal page-transition" aria-label="Popular route shortcuts">
+        <button data-from="Ahmedabad" data-to="Surat">Ahmedabad → Surat</button>
+        <button data-from="Surat" data-to="Dwarka">Surat → Dwarka</button>
+        <button data-from="Vadodara" data-to="Ahmedabad">Vadodara → Ahmedabad</button>
+        <button data-from="Gandhinagar" data-to="Somnath">Gandhinagar → Somnath</button>
+        <button data-from="Rajkot" data-to="Bhavnagar">Rajkot → Bhavnagar</button>
+        <button data-from="Bhuj" data-to="Ahmedabad">Bhuj → Ahmedabad</button>
+        <button data-from="Mehsana" data-to="Palanpur">Mehsana → Palanpur</button>
+        <button data-from="Navsari" data-to="Vapi">Navsari → Vapi</button>
+      </section>
+
+      <section class="panel reveal page-transition" id="routes">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Available services</p>
+            <h2>Recommended buses</h2>
+          </div>
+          <div class="journey-summary" id="journeySummary">Ahmedabad to Surat</div>
+        </div>
+        <div class="route-results" id="routeResults"></div>
+      </section>
+    </div>
+
+    <!-- Page 3: Seats -->
+    <div class="page" id="page-seats">
+      <button class="floating-back" id="backToRoutes" type="button" aria-label="Go Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <section class="booking-workspace page-transition" id="seats">
+        <div class="panel reveal">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Coach layout</p>
+              <h2>Select seats</h2>
+            </div>
+            <div class="seat-legend">
+              <span><i class="available"></i>Available</span>
+              <span><i class="male"></i>Male</span>
+              <span><i class="female"></i>Female</span>
+              <span><i class="child"></i>Child</span>
+              <span><i class="divyang"></i>Divyang</span>
+              <span><i class="booked"></i>Booked</span>
+            </div>
+          </div>
+          <div class="coach-shell">
+            <div class="driver-cabin">
+              <span>Driver</span>
+              <div class="steering"></div>
+            </div>
+            <div class="seat-map" id="seatMap" aria-label="Seat map"></div>
+          </div>
+        </div>
+
+        <aside class="summary-card reveal delay-1">
+          <p class="eyebrow">Trip summary</p>
+          <h2 id="selectedBusName">Select a bus</h2>
+          <div class="timeline">
+            <div>
+              <span id="summaryFrom">Ahmedabad</span>
+              <strong id="summaryDepart">--:--</strong>
+            </div>
+            <i></i>
+            <div>
+              <span id="summaryTo">Surat</span>
+              <strong id="summaryArrive">--:--</strong>
+            </div>
+          </div>
+          <dl class="fare-list">
+            <div>
+              <dt>Seats</dt>
+              <dd id="summarySeats">None</dd>
+            </div>
+            <div class="passenger-type-block">
+              <dt>Passenger Type</dt>
+              <dd id="passengerTypes">Select seats first</dd>
+            </div>
+            <div>
+              <dt>Base Fare</dt>
+              <dd id="baseFare">Rs. 0</dd>
+            </div>
+            <div>
+              <dt>Concession</dt>
+              <dd id="discountFare">Rs. 0</dd>
+            </div>
+            <div>
+              <dt>Service Fee</dt>
+              <dd id="serviceFee">Rs. 0</dd>
+            </div>
+            <div class="total-row">
+              <dt>Total</dt>
+              <dd id="totalFare">Rs. 0</dd>
+            </div>
+          </dl>
+          <button class="primary-button full-width" id="continuePayment" type="button">Continue to Payment</button>
+        </aside>
+      </section>
+    </div>
+
+    <!-- Page 4: Payment -->
+    <div class="page" id="page-payment">
+      <button class="floating-back" id="backToSeats" type="button" aria-label="Go Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <section class="payment-panel panel reveal page-transition" id="payment">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Passenger and payment</p>
+            <h2>Complete booking</h2>
+          </div>
+          <span class="secure-pill">Secure demo checkout</span>
+        </div>
+
+        <div class="checkout-grid">
+          <form class="passenger-form" id="passengerForm">
+            <label>
+              <span>Passenger Name</span>
+              <input id="passengerName" type="text" placeholder="Enter full name" required>
+            </label>
+            <label>
+              <span>Mobile Number</span>
+              <input id="mobileNumber" type="tel" placeholder="10 digit mobile" pattern="[0-9]{10}" required>
+            </label>
+            <label>
+              <span>Email</span>
+              <input id="emailAddress" type="email" placeholder="name@example.com" required>
+            </label>
+            <label>
+              <span>Boarding Point</span>
+              <select id="boardingPoint">
+                <option>Central Bus Stand</option>
+                <option>Geeta Mandir Terminal</option>
+                <option>Railway Station Pickup</option>
+                <option>City Circle Stand</option>
+              </select>
+            </label>
+          </form>
+
+          <div class="payment-box">
+            <div style="text-align:center; margin-bottom: 24px; padding: 20px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+              <p style="margin: 0 0 10px; font-weight: 600; color: #1e293b;">Secure Razorpay Checkout</p>
+              <p style="margin: 0; font-size: 0.9rem; color: #64748b;">We use Razorpay's secure payment gateway. Since this is a test environment, you can use any dummy UPI ID or Card.</p>
+            </div>
+            <button class="primary-button full-width" id="payNowBtn" type="button">Pay with Razorpay</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer style="text-align: center; padding: 20px; font-size: 14px; color: #64748b; margin-top: 40px; border-top: 1px solid #e2e8f0; background: #fff;">
+    <p>&copy; 2026 Gujarat Bus Seva. All rights reserved.</p>
+    <div style="margin-top: 10px; display: flex; justify-content: center; gap: 15px;">
+      <a href="privacy.html" style="color: #bf1f2f; text-decoration: none;">Privacy Policy</a>
+      <a href="terms.html" style="color: #bf1f2f; text-decoration: none;">Terms & Conditions</a>
+      <a href="refunds.html" style="color: #bf1f2f; text-decoration: none;">Refund Policy</a>
+      <a href="contact.html" style="color: #bf1f2f; text-decoration: none;">Contact Us</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <dialog class="ticket-dialog" id="ticketDialog">
+    <div class="ticket">
+      <button class="close-dialog" id="closeTicket" type="button" aria-label="Close ticket">×</button>
+      <div class="ticket-top">
+        <span class="brand-mark">GS</span>
+        <div>
+          <p class="eyebrow">Confirmed ticket</p>
+          <h2>Gujarat Bus Seva</h2>
+        </div>
+      </div>
+      <div class="ticket-route">
+        <strong id="ticketFrom">Ahmedabad</strong>
+        <span></span>
+        <strong id="ticketTo">Surat</strong>
+      </div>
+      <div class="ticket-grid">
+        <div>
+          <span>PNR</span>
+          <strong id="ticketPnr">GS000000</strong>
+        </div>
+        <div>
+          <span>Date</span>
+          <strong id="ticketDate">--</strong>
+        </div>
+        <div>
+          <span>Bus</span>
+          <strong id="ticketBus">--</strong>
+        </div>
+        <div>
+          <span>Seats</span>
+          <strong id="ticketSeats">--</strong>
+        </div>
+        <div>
+          <span>Category</span>
+          <strong id="ticketCategories">--</strong>
+        </div>
+        <div>
+          <span>Passenger</span>
+          <strong id="ticketPassenger">--</strong>
+        </div>
+        <div>
+          <span>Boarding</span>
+          <strong id="ticketBoarding">--</strong>
+        </div>
+        <div>
+          <span>Amount</span>
+          <strong id="ticketAmount">Rs. 0</strong>
+        </div>
+      </div>
+      <button class="primary-button full-width" id="downloadTicketAction" type="button">Download Ticket</button>
+    </div>
+  </dialog>
+
+  <!-- My Tickets Auth Dialog -->
+  <dialog class="my-tickets-dialog" id="myTicketsAuthDialog">
+    <div class="ticket-auth">
+      <button class="close-dialog" onclick="document.getElementById('myTicketsAuthDialog').close()" type="button" aria-label="Close">×</button>
+      <div class="ticket-top" style="margin-bottom: 20px;">
+        <span class="brand-mark">GS</span>
+        <div>
+          <p class="eyebrow">My Tickets</p>
+          <h2>Find Your Journeys</h2>
+        </div>
+      </div>
+      <p style="color: var(--muted); margin-bottom: 16px; font-size: 0.95rem;">Enter your booking details to fetch all your past and upcoming tickets.</p>
+      
+      <div style="margin-bottom: 14px;">
+        <label style="display:block; margin-bottom: 6px; font-weight: 700; color: var(--ink); font-size: 0.85rem;">Mobile Number</label>
+        <input type="tel" id="myTicketsMobile" placeholder="e.g. 9876543210" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line);">
+      </div>
+      
+      <div style="margin-bottom: 24px;">
+        <label style="display:block; margin-bottom: 6px; font-weight: 700; color: var(--ink); font-size: 0.85rem;">Email Address</label>
+        <input type="email" id="myTicketsEmail" placeholder="e.g. name@example.com" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line);">
+      </div>
+
+      <button class="primary-button full-width" id="fetchMyTicketsBtn" type="button">Fetch My Tickets</button>
+    </div>
+  </dialog>
+
+  <!-- My Tickets List Dialog -->
+  <dialog class="my-tickets-list-dialog" id="myTicketsListDialog">
+    <div class="tickets-list-container">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line);">
+        <div>
+          <h2 style="margin: 0; font-size: 1.5rem;">My Tickets</h2>
+          <p style="margin: 4px 0 0; color: var(--muted); font-size: 0.9rem;" id="myTicketsSubtitle">Tickets for ...</p>
+        </div>
+        <button class="close-dialog" style="position: static;" onclick="document.getElementById('myTicketsListDialog').close()" type="button" aria-label="Close">×</button>
+      </div>
+
+      <div class="tickets-tabs">
+        <button class="tab-btn active" id="tabUpcoming" onclick="switchTicketTab('upcoming')">Upcoming Journeys</button>
+        <button class="tab-btn" id="tabPast" onclick="switchTicketTab('past')">Past Journeys</button>
+      </div>
+
+      <div id="ticketsListContent" style="min-height: 250px; max-height: 50vh; overflow-y: auto; padding-right: 10px;">
+        <!-- Tickets will be injected here via JS -->
+      </div>
+    </div>
+  </dialog>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="env.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
