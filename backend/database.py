@@ -12,7 +12,9 @@ DB_PATH = Path(__file__).parent / "bus_booking.db"
 def get_connection() -> sqlite3.Connection:
     conn = sqlite3.connect(str(DB_PATH))
     conn.row_factory = sqlite3.Row  # return dict-like rows
-    conn.execute("PRAGMA journal_mode=WAL")  # better concurrency
+    # Changed from WAL to DELETE so data writes directly to the .db file
+    # This ensures downloaded .db files from Railway have the latest data
+    conn.execute("PRAGMA journal_mode=DELETE")
     return conn
 
 
