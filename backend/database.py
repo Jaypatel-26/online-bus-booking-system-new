@@ -6,7 +6,14 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
-DB_PATH = Path(__file__).parent / "bus_booking.db"
+import os
+
+# Railway persistent volume support
+RAILWAY_VOLUME = os.getenv("RAILWAY_VOLUME_MOUNT_PATH")
+if RAILWAY_VOLUME:
+    DB_PATH = Path(RAILWAY_VOLUME) / "bus_booking.db"
+else:
+    DB_PATH = Path(__file__).parent / "bus_booking.db"
 
 
 def get_connection() -> sqlite3.Connection:

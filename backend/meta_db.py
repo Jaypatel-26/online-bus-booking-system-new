@@ -4,8 +4,16 @@ import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 
-META_DB_PATH = Path(__file__).parent / "supabase_meta.db"
-PROJECTS_DIR = Path(__file__).parent / "projects"
+import os
+
+RAILWAY_VOLUME = os.getenv("RAILWAY_VOLUME_MOUNT_PATH")
+if RAILWAY_VOLUME:
+    base_dir = Path(RAILWAY_VOLUME)
+else:
+    base_dir = Path(__file__).parent
+
+META_DB_PATH = base_dir / "supabase_meta.db"
+PROJECTS_DIR = base_dir / "projects"
 PROJECTS_DIR.mkdir(exist_ok=True)
 
 def get_meta_connection() -> sqlite3.Connection:
@@ -29,7 +37,7 @@ def init_meta_db():
     # Import existing bus booking DB if projects table is empty
     cursor = conn.execute("SELECT COUNT(*) FROM projects")
     if cursor.fetchone()[0] == 0:
-        legacy_db = Path(__file__).parent / "bus_booking.db"
+        legacy_db = base_dir / "bus_booking.db"
         if legacy_db.exists():
             project_id = str(uuid.uuid4())
             api_key = f"sbp_{uuid.uuid4().hex}"
@@ -56,7 +64,7 @@ def create_project(name: str) -> dict:
     conn.commit()
     
     # Create the actual SQLite file for the project
-    db_path = Path(__file__).parent / db_file_rel
+    db_path = base_dir / db_file_rel
     sqlite3.connect(str(db_path)).close()
     
     row = conn.execute("SELECT * FROM projects WHERE id = ?", (project_id,)).fetchone()
@@ -77,7 +85,7 @@ def get_project_connection(project_id: str) -> sqlite3.Connection:
     if not row:
         raise FileNotFoundError(f"Project DB {project_id} not found in meta DB")
         
-    db_path = Path(__file__).parent / row["db_file"]
+    db_path = base_dir / row["db_file"]
     if not db_path.exists():
         raise FileNotFoundError(f"Database file {db_path} does not exist")
         
